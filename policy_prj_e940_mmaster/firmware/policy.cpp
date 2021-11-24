@@ -31,7 +31,7 @@ output_data policy(
 #else
 //hls-fpga-machine-learning insert cpragmas
 hls_max_concurrency(0)
-hls_component_ii(128)
+  //hls_component_ii(128)
 hls_scheduler_target_fmax_mhz(200)
 component output_data policy(
     input_data inputs,
@@ -79,7 +79,6 @@ component output_data policy(
 	}
       }
     } else {
-
       layer2_t layer2_out[N_LAYER_2] hls_register;
       nnet::dense_resource<input_t, layer2_t, config2>(inputs.input_2, layer2_out, w2, b2);
 

@@ -40,9 +40,12 @@ typedef ac_int<1, false> layer8_index;
 // This is for how the weights are stored offline
 typedef ac_fixed<20,6,true> weights_t;
 const size_t DWIDTH = 128;  // The transfer width
+const size_t ALIGN = 16;
 
 const size_t ARRAY_SIZES[] = {768, 128, 16384, 128, 16384, 128, 896, 7};
 const size_t ARRAY_CUMUL[] = {768, 896, 17280, 17408, 33792, 33920, 34816, 34823};
+
+const size_t NUM_WEIGHTS = ARRAY_CUMUL[7];
 
 #define DIV_ROUNDUP(n,d) ((n + d - 1) / d)
 #define MIN(n,d) (n > d ? d : n)

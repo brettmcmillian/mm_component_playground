@@ -29,7 +29,7 @@
 // only used if providing external weights
 //hls-fpga-machine-learning insert weights
 
-static weights_t weights[ARRAY_CUMUL[NUM_ARRAYS-1]];
+static weights_t weights[NUM_WEIGHTS];
 
 #define CHECKPOINT 5000
 
@@ -70,10 +70,12 @@ int main(int argc, char **argv)
   std::vector<input_data> inputs;
   std::vector<output_data> outputs;
 
+  ihc::mm_master<weights_t, ihc::aspace<1>, ihc::dwidth<DWIDTH>, ihc::align<ALIGN> > 
+    mm_weights(weights, sizeof(weights_t)*NUM_WEIGHTS);
+
   // first load the weights
   input_data dummy;
-  policy(dummy, true, 0)
-
+  policy(dummy, true, mm_weights);
   
   if (fin.is_open() && fpr.is_open()) {
     std::vector<std::vector<float> > predictions;
@@ -111,7 +113,7 @@ int main(int argc, char **argv)
     // Do this separately to avoid vector reallocation
     //hls-fpga-machine-learning insert top-level-function
     for(int i = 0; i < num_iterations; i++) {
-      ihc_hls_enqueue(&outputs[i], policy, inputs[i], false, 0);
+      ihc_hls_enqueue(&outputs[i], policy, inputs[i], false, mm_weights);
     }
 
     //hls-fpga-machine-learning insert run
@@ -151,7 +153,7 @@ int main(int argc, char **argv)
 
     //hls-fpga-machine-learning insert top-level-function
     for(int i = 0; i < num_iterations; i++) {
-      ihc_hls_enqueue(&outputs[i], policy, inputs[i], w2, b2, w4, b4, w6, b6, w8, b8);
+      ihc_hls_enqueue(&outputs[i], policy, inputs[i], false, mm_weights);
     }
 
     //hls-fpga-machine-learning insert run
