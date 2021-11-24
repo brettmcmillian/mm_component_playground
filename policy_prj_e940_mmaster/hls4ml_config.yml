@@ -1,0 +1,16 @@
+Backend: Quartus
+ClockPeriod: 5
+ExternalWeights: true
+HLSConfig:
+  Model:
+    Precision: ac_fixed<20,6>
+    ReuseFactor: 128
+    Strategy: Latency
+IOType: io_parallel
+InputData: null
+KerasModel: !keras_model 'policy_prj_e940_external/keras_model.h5'
+OutputDir: policy_prj_e940_external
+OutputPredictions: null
+Part: Arria10
+ProjectName: policy
+Stamp: EaAfF0Eb
