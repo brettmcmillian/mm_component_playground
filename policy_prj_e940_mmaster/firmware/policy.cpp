@@ -36,7 +36,7 @@ hls_scheduler_target_fmax_mhz(200)
 component output_data policy(
     input_data inputs,
     bool load_weights,
-    ihc::mm_master<weights_t, ihc::aspace<1>, ihc::dwidth<DWIDTH>, ihc::align<ALIGN> >  &remote_weights
+    ihc::mm_master<weights_t, ihc::aspace<1>, ihc::dwidth<DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<readonly> >  &remote_weights
 ) {
 #endif
     hls_register output_data outputs;
