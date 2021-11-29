@@ -31,7 +31,7 @@ output_data policy(
 #else
 //hls-fpga-machine-learning insert cpragmas
 hls_max_concurrency(0)
-  //hls_component_ii(128)
+//hls_component_ii(128)
 hls_scheduler_target_fmax_mhz(200)
 component output_data policy(
     input_data inputs,
