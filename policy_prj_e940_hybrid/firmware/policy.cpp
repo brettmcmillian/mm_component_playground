@@ -82,6 +82,7 @@ component output_data policy(
     return outputs;
 }
 
+hls_scheduler_target_fmax_mhz(200)
 component void update_weights(
 			      ihc::mm_master<weights_t, ihc::aspace<1>, ihc::dwidth<DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<readonly> >  &remote_weights,
 			      ihc::mm_master<weights_t, ihc::aspace<2>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &w2,
