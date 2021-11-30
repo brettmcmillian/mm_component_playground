@@ -82,36 +82,26 @@ component output_data policy(
       }
       update_complete.write(1);
     } else {
-      outputs = policy_internal(inputs);
+      layer2_t layer2_out[N_LAYER_2] hls_register;
+      nnet::dense_resource<input_t, layer2_t, config2>(inputs.input_2, layer2_out, w2, b2);
+      
+      layer3_t layer3_out[N_LAYER_2] hls_register;
+      nnet::relu<layer2_t, layer3_t, relu_config3>(layer2_out, layer3_out);
+      
+      layer4_t layer4_out[N_LAYER_4] hls_register;
+      nnet::dense_resource<layer3_t, layer4_t, config4>(layer3_out, layer4_out, w4, b4);
+      
+      layer5_t layer5_out[N_LAYER_4] hls_register;
+      nnet::relu<layer4_t, layer5_t, relu_config5>(layer4_out, layer5_out);
+      
+      layer6_t layer6_out[N_LAYER_6] hls_register;
+      nnet::dense_resource<layer5_t, layer6_t, config6>(layer5_out, layer6_out, w6, b6);
+      
+      layer7_t layer7_out[N_LAYER_6] hls_register;
+      nnet::relu<layer6_t, layer7_t, relu_config7>(layer6_out, layer7_out);
+      
+      nnet::dense_resource<layer7_t, result_t, config8>(layer7_out, outputs.layer8_out, w8, b8);
     }
 
     return outputs;
-}
-
-
-output_data policy_internal(input_data inputs)
-{
-  hls_register output_data outputs;
-
-  layer2_t layer2_out[N_LAYER_2] hls_register;
-  nnet::dense_resource<input_t, layer2_t, config2>(inputs.input_2, layer2_out, w2, b2);
-  
-  layer3_t layer3_out[N_LAYER_2] hls_register;
-  nnet::relu<layer2_t, layer3_t, relu_config3>(layer2_out, layer3_out);
-  
-  layer4_t layer4_out[N_LAYER_4] hls_register;
-  nnet::dense_resource<layer3_t, layer4_t, config4>(layer3_out, layer4_out, w4, b4);
-  
-  layer5_t layer5_out[N_LAYER_4] hls_register;
-  nnet::relu<layer4_t, layer5_t, relu_config5>(layer4_out, layer5_out);
-  
-  layer6_t layer6_out[N_LAYER_6] hls_register;
-  nnet::dense_resource<layer5_t, layer6_t, config6>(layer5_out, layer6_out, w6, b6);
-  
-  layer7_t layer7_out[N_LAYER_6] hls_register;
-  nnet::relu<layer6_t, layer7_t, relu_config7>(layer6_out, layer7_out);
-  
-  nnet::dense_resource<layer7_t, result_t, config8>(layer7_out, outputs.layer8_out, w8, b8);
-
-  return outputs;
 }
