@@ -84,15 +84,16 @@ component output_data policy(
 
 hls_scheduler_target_fmax_mhz(200)
 component void update_weights(
-			      ihc::mm_master<weights_t, ihc::aspace<1>, ihc::dwidth<DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<readonly> >  &remote_weights,
-			      ihc::mm_master<weights_t, ihc::aspace<2>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &w2,
-			      ihc::mm_master<weights_t, ihc::aspace<3>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &b2,
-			      ihc::mm_master<weights_t, ihc::aspace<4>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &w4,
-			      ihc::mm_master<weights_t, ihc::aspace<5>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &b4,
-			      ihc::mm_master<weights_t, ihc::aspace<6>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &w6,
-			      ihc::mm_master<weights_t, ihc::aspace<7>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &b6,
-			      ihc::mm_master<weights_t, ihc::aspace<8>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &w8,
-			      ihc::mm_master<weights_t, ihc::aspace<9>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &b8
+			      ihc::mm_master<weights_t, ihc::aspace<1>, ihc::dwidth<DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<readonly>, 
+			        ihc::latency<0>, ihc::maxburst<8>, ihc::waitrequest<true> >  &remote_weights,
+			      ihc::mm_master<model_default_t, ihc::aspace<2>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &w2,
+			      ihc::mm_master<model_default_t, ihc::aspace<3>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &b2,
+			      ihc::mm_master<model_default_t, ihc::aspace<4>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &w4,
+			      ihc::mm_master<model_default_t, ihc::aspace<5>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &b4,
+			      ihc::mm_master<model_default_t, ihc::aspace<6>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &w6,
+			      ihc::mm_master<model_default_t, ihc::aspace<7>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &b6,
+			      ihc::mm_master<model_default_t, ihc::aspace<8>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &w8,
+			      ihc::mm_master<model_default_t, ihc::aspace<9>, ihc::dwidth<INTERNAL_DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<writeonly> > &b8
 			      )
 {
   for (int i = 0; i < ARRAY_CUMUL[7]; i++) {
