@@ -37,7 +37,7 @@ component output_data policy(
     input_data inputs,
     bool load_weights,
     ihc::mm_master<weights_t, ihc::aspace<1>, ihc::dwidth<DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<readonly>,
-    ihc::latency<0>, ihc::maxburst<8>, ihc::waitrequest<true> >  &remote_weights,
+      ihc::latency<0>, ihc::maxburst<8>, ihc::waitrequest<true> >  &remote_weights,
     ihc::stream_out<int> &update_complete
 ) {
 #endif

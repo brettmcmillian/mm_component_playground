@@ -70,12 +70,15 @@ int main(int argc, char **argv)
   std::vector<input_data> inputs;
   std::vector<output_data> outputs;
 
-  ihc::mm_master<weights_t, ihc::aspace<1>, ihc::dwidth<DWIDTH>, ihc::align<ALIGN> > 
+  ihc::mm_master<weights_t, ihc::aspace<1>, ihc::dwidth<DWIDTH>, ihc::align<ALIGN>, ihc::readwrite_mode<readonly>,
+      ihc::latency<0>, ihc::maxburst<8>, ihc::waitrequest<true> > 
     mm_weights(weights, sizeof(weights_t)*NUM_WEIGHTS);
+
+  ihc::stream_out<int> update_complete;
 
   // first load the weights
   input_data dummy;
-  policy(dummy, true, mm_weights);
+  policy(dummy, true, mm_weights, update_complete);
   
   if (fin.is_open() && fpr.is_open()) {
     std::vector<std::vector<float> > predictions;
@@ -113,7 +116,7 @@ int main(int argc, char **argv)
     // Do this separately to avoid vector reallocation
     //hls-fpga-machine-learning insert top-level-function
     for(int i = 0; i < num_iterations; i++) {
-      ihc_hls_enqueue(&outputs[i], policy, inputs[i], false, mm_weights);
+      ihc_hls_enqueue(&outputs[i], policy, inputs[i], false, mm_weights, update_complete);
     }
 
     //hls-fpga-machine-learning insert run
@@ -153,7 +156,7 @@ int main(int argc, char **argv)
 
     //hls-fpga-machine-learning insert top-level-function
     for(int i = 0; i < num_iterations; i++) {
-      ihc_hls_enqueue(&outputs[i], policy, inputs[i], false, mm_weights);
+      ihc_hls_enqueue(&outputs[i], policy, inputs[i], false, mm_weights, update_complete);
     }
 
     //hls-fpga-machine-learning insert run
