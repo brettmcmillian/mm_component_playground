@@ -151,6 +151,8 @@ int main(int argc, char **argv)
     std::cout << "INFO: Unable to open input/predictions file, using default input with " << num_iterations << " invocations." << std::endl;
     //hls-fpga-machine-learning insert zero
     for(int i = 0; i < num_iterations; i++) {
+      inputs.emplace_back();
+      outputs.emplace_back();
       std::fill_n(inputs[i].input_2, N_INPUT_1_1, 0.0);
     }
 
