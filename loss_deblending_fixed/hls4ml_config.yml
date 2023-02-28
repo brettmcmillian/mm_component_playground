@@ -1,0 +1,17 @@
+Backend: Quartus
+ClockPeriod: 5
+HLSConfig:
+  Model:
+    BramFactor: 1000000000
+    Precision: ap_fixed<16,10>
+    ReuseFactor: 32
+    Strategy: Resource
+    TraceOutput: false
+IOType: io_stream
+InputData: null
+KerasModel: !keras_model 'testing_quartus_large_fixed/keras_model.h5'
+OutputDir: testing_quartus_large_fixed
+OutputPredictions: null
+Part: 10AS066H2F34I1HG
+ProjectName: myproject
+Stamp: 09157d8d
