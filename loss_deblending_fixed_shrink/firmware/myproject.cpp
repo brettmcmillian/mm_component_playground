@@ -50,42 +50,42 @@
  * Therefore, layer inputs/output (connections betweenn individual layers) are declared here
  */
 // hls-fpga-machine-learning insert inter-task streams
-stream<input_t> inputLayer;
-stream<layer2_t> layer2_out;
-stream<layer3_t> layer3_out;
-stream<layer4_t> layer4_out;
-stream<layer5_t> layer5_out;
-stream<layer34_t> layer34_cpy1;
-stream<layer34_t> layer34_cpy2;
-stream<layer6_t> layer6_out;
-stream<layer7_t> layer7_out;
-stream<layer8_t> layer8_out;
-stream<layer9_t> layer9_out;
-stream<layer10_t> layer10_out;
-stream<layer35_t> layer35_cpy1;
-stream<layer35_t> layer35_cpy2;
-stream<layer11_t> layer11_out;
-stream<layer12_t> layer12_out;
-stream<layer13_t> layer13_out;
-stream<layer14_t> layer14_out;
-stream<layer15_t> layer15_out;
-stream<layer16_t> layer16_out;
-stream<layer17_t> layer17_out;
-stream<layer18_t> layer18_out;
-stream<layer19_t> layer19_out;
-stream<layer20_t> layer20_out;
-stream<layer21_t> layer21_out;
-stream<layer22_t> layer22_out;
-stream<layer23_t> layer23_out;
-stream<layer24_t> layer24_out;
-stream<layer25_t> layer25_out;
-stream<layer26_t> layer26_out;
-stream<layer27_t> layer27_out;
-stream<layer28_t> layer28_out;
-stream<layer29_t> layer29_out;
+stream<input_t, 600> inputLayer;
+stream<layer2_t, 600> layer2_out;
+stream<layer3_t, 600> layer3_out;
+stream<layer4_t, 2> layer4_out;
+stream<layer5_t, 2> layer5_out;
+stream<layer34_t, 2> layer34_cpy1;
+stream<layer34_t, 200> layer34_cpy2;
+stream<layer6_t, 2> layer6_out;
+stream<layer7_t, 2> layer7_out;
+stream<layer8_t, 2> layer8_out;
+stream<layer9_t, 2> layer9_out;
+stream<layer10_t, 2> layer10_out;
+stream<layer35_t, 2> layer35_cpy1;
+stream<layer35_t, 50> layer35_cpy2;
+stream<layer11_t, 2> layer11_out;
+stream<layer12_t, 2> layer12_out;
+stream<layer13_t, 2> layer13_out;
+stream<layer14_t, 2> layer14_out;
+stream<layer15_t, 2> layer15_out;
+stream<layer16_t, 2> layer16_out;
+stream<layer17_t, 50> layer17_out;
+stream<layer18_t, 50> layer18_out;
+stream<layer19_t, 2> layer19_out;
+stream<layer20_t, 20> layer20_out;
+stream<layer21_t, 2> layer21_out;
+stream<layer22_t, 2> layer22_out;
+stream<layer23_t, 2> layer23_out;
+stream<layer24_t, 50> layer24_out;
+stream<layer25_t, 100> layer25_out;
+stream<layer26_t, 2> layer26_out;
+stream<layer27_t, 2> layer27_out;
+stream<layer28_t, 2> layer28_out;
+stream<layer29_t, 20> layer29_out;
 auto& layer30_out = layer29_out;
-stream<layer31_t> layer31_out;
-stream<layer33_t> layer33_out;
+stream<layer31_t, 2> layer31_out;
+stream<layer33_t, 2> layer33_out;
 
 #ifndef __INTELFPGA_COMPILER__
 /*

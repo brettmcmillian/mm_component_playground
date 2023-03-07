@@ -17,9 +17,9 @@
 #define hls_register
 
 #include "stream.h"
-template <typename T> using stream = nnet::stream<T>;
-template <typename T> using stream_in = nnet::stream<T>;
-template <typename T> using stream_out = nnet::stream<T>;
+template <typename T, unsigned int N> using stream = nnet::stream<T>;
+template <typename T, unsigned int N> using stream_in = nnet::stream<T>;
+template <typename T, unsigned int N> using stream_out = nnet::stream<T>;
 
 #else
 
@@ -27,9 +27,9 @@ template <typename T> using stream_out = nnet::stream<T>;
 #include "HLS/ac_int.h"
 #include "HLS/hls.h"
 
-template <typename T> using stream = ihc::stream<T>;
-template <typename T> using stream_in = ihc::stream_in<T>;
-template <typename T> using stream_out = ihc::stream_out<T>;
+template <typename T, unsigned int N> using stream = ihc::stream<T, ihc::buffer<N>>;
+template <typename T, unsigned int N> using stream_in = ihc::stream_in<T, ihc::buffer<N>>;
+template <typename T, unsigned int N> using stream_out = ihc::stream_out<T, ihc::buffer<N>>;
 
 #endif
 
