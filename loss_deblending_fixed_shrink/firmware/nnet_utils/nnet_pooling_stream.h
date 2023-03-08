@@ -24,10 +24,10 @@ namespace nnet {
 *   (4) Counter housekeeping - performs the required pooling operation
 *
 */
-template<class data_T, class res_T, typename CONFIG_T>
+template<class data_T, class res_T, unsigned int res_N, typename CONFIG_T>
 void compute_pool_buffer_1d(
     const data_T &in_elem,
-    stream<res_T> &res_stream,
+    stream<res_T, res_N> &res_stream,
     nnet::shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[CONFIG_T::n_filt],
     typename data_T::value_type kernel_window[CONFIG_T::pool_width * CONFIG_T::n_filt]
 ) {
@@ -83,8 +83,8 @@ void compute_pool_buffer_1d(
 }
 
 
-template <class data_T, class res_T, typename CONFIG_T>
-void pooling1d_cl(stream<data_T> &data, stream<res_T>  &res) {
+template <class data_T, unsigned int data_N, class res_T, unsigned res_N, typename CONFIG_T>
+void pooling1d_cl(stream<data_T, data_N> &data, stream<res_T, res_N>  &res) {
     assert(CONFIG_T::pool_width == CONFIG_T::stride_width);
     assert(CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0);
 
@@ -95,7 +95,7 @@ void pooling1d_cl(stream<data_T> &data, stream<res_T>  &res) {
     // Read input image
     ReadInputWidth: 
     for (int col = 0; col < CONFIG_T::in_width; col++) {
-        compute_pool_buffer_1d<data_T, res_T, CONFIG_T>(data.read(), res, line_buffer, kernel_window);
+        compute_pool_buffer_1d<data_T, res_T, res_N, CONFIG_T>(data.read(), res, line_buffer, kernel_window);
     }
 }
 
@@ -115,10 +115,10 @@ void pooling1d_cl(stream<data_T> &data, stream<res_T>  &res) {
 *   (4) Counter housekeeping - performs the required pooling operation
 *
 */
-template<class data_T, class res_T, typename CONFIG_T>
+template<class data_T, class res_T, unsigned int res_N, typename CONFIG_T>
 void compute_pool_buffer_2d(
     const data_T &in_elem,
-    stream<res_T> &res_stream,
+    stream<res_T, res_N> &res_stream,
     nnet::shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[CONFIG_T::pool_height - 1][CONFIG_T::n_filt],
     typename data_T::value_type kernel_window[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt]
 ) {
@@ -184,8 +184,8 @@ void compute_pool_buffer_2d(
     }
 }
 
-template <class data_T, class res_T, typename CONFIG_T>
-void pooling2d_cl(stream<data_T> &data, stream<res_T>  &res) {
+template <class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void pooling2d_cl(stream<data_T, data_N> &data, stream<res_T, res_N>  &res) {
     assert(CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width);
     assert(CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0);
     assert(CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0);
@@ -200,7 +200,7 @@ void pooling2d_cl(stream<data_T> &data, stream<res_T>  &res) {
         // Read input image
         ReadInputWidth: 
         for (int col = 0; col < CONFIG_T::in_width; col++) {
-            compute_pool_buffer_2d<data_T, res_T, CONFIG_T>(data.read(), res, line_buffer, kernel_window);
+            compute_pool_buffer_2d<data_T, res_T, res_N, CONFIG_T>(data.read(), res, line_buffer, kernel_window);
         }
     }
 }
@@ -250,8 +250,8 @@ void compute_global_pool(const data_T& in_elem, typename CONFIG_T::accum_t data_
     }
 }
 
-template<class data_T, class res_T, typename CONFIG_T>
-void global_pooling1d_cl(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned res_N, typename CONFIG_T>
+void global_pooling1d_cl(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     assert(CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0);
 
     hls_register typename CONFIG_T::accum_t data_input[CONFIG_T::n_filt];
@@ -281,8 +281,8 @@ void global_pooling1d_cl(stream<data_T> &data, stream<res_T> &res) {
     res.write(res_pack);
 }
 
-template<class data_T, class res_T, typename CONFIG_T>
-void global_pooling2d_cl(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned res_N, typename CONFIG_T>
+void global_pooling2d_cl(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     assert(CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0);
     assert(CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0);
 

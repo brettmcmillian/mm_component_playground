@@ -102,8 +102,8 @@ stream<layer33_t, 2> layer33_out;
 */
 // hls-fpga-machine-learning instantiate GCC top-level
 void myproject(
-   stream_in<input_t> &inputLayer_stream,
-   stream_out<result_t> &layer33_out_stream
+   stream_in<input_t, 600> &inputLayer_stream,
+   stream_out<result_t, 2> &layer33_out_stream
 ) {
 #else
 // Maximum initiation interval, concurrency and frequency for HLS syntheis are defined here
@@ -116,8 +116,8 @@ hls_scheduler_target_fmax_mhz(200)
  */
 // hls-fpga-machine-learning instantiate HLS top-level
 component void myproject(
-   stream_in<input_t> &inputLayer_stream,
-   stream_out<result_t> &layer33_out_stream
+   stream_in<input_t, 600> &inputLayer_stream,
+   stream_out<result_t, 2> &layer33_out_stream
 ) {
 #endif
 // If using io_parallel, the output needs to be initialised and returned at the end of this function
@@ -134,69 +134,69 @@ component void myproject(
 
 // hls-fpga-machine-learning insert layers
 
-    nnet::conv_1d_cl<input_t, layer2_t, config2>(inputLayer, layer2_out, w2, b2);
+    nnet::conv_1d_cl<input_t, 600, layer2_t, 600, config2>(inputLayer, layer2_out, w2, b2);
 
-    nnet::relu<layer2_t, layer3_t, relu_config3>(layer2_out, layer3_out);
+    nnet::relu<layer2_t, 600, layer3_t, 600, relu_config3>(layer2_out, layer3_out);
 
-    nnet::conv_1d_cl<layer3_t, layer4_t, config4>(layer3_out, layer4_out, w4, b4);
+    nnet::conv_1d_cl<layer3_t, 600, layer4_t, 2, config4>(layer3_out, layer4_out, w4, b4);
 
-    nnet::relu<layer4_t, layer5_t, relu_config5>(layer4_out, layer5_out);
+    nnet::relu<layer4_t, 2, layer5_t, 2, relu_config5>(layer4_out, layer5_out);
 
-    nnet::clone_stream<layer5_t, layer34_t, 1028>(layer5_out, layer34_cpy1, layer34_cpy2);
+    nnet::clone_stream<layer5_t, 2, layer34_t, 2, 200, 1028>(layer5_out, layer34_cpy1, layer34_cpy2);
 
-    nnet::pooling1d_cl<layer34_t, layer6_t, config6>(layer34_cpy1, layer6_out);
+    nnet::pooling1d_cl<layer34_t, 2, layer6_t, 2, config6>(layer34_cpy1, layer6_out);
 
-    nnet::conv_1d_cl<layer6_t, layer7_t, config7>(layer6_out, layer7_out, w7, b7);
+    nnet::conv_1d_cl<layer6_t, 2, layer7_t, 2, config7>(layer6_out, layer7_out, w7, b7);
 
-    nnet::relu<layer7_t, layer8_t, relu_config8>(layer7_out, layer8_out);
+    nnet::relu<layer7_t, 2, layer8_t, 2, relu_config8>(layer7_out, layer8_out);
 
-    nnet::conv_1d_cl<layer8_t, layer9_t, config9>(layer8_out, layer9_out, w9, b9);
+    nnet::conv_1d_cl<layer8_t, 2, layer9_t, 2, config9>(layer8_out, layer9_out, w9, b9);
 
-    nnet::relu<layer9_t, layer10_t, relu_config10>(layer9_out, layer10_out);
+    nnet::relu<layer9_t, 2, layer10_t, 2, relu_config10>(layer9_out, layer10_out);
 
-    nnet::clone_stream<layer10_t, layer35_t, 756>(layer10_out, layer35_cpy1, layer35_cpy2);
+    nnet::clone_stream<layer10_t, 2, layer35_t, 2, 50, 756>(layer10_out, layer35_cpy1, layer35_cpy2);
 
-    nnet::pooling1d_cl<layer35_t, layer11_t, config11>(layer35_cpy1, layer11_out);
+    nnet::pooling1d_cl<layer35_t, 2, layer11_t, 2, config11>(layer35_cpy1, layer11_out);
 
-    nnet::conv_1d_cl<layer11_t, layer12_t, config12>(layer11_out, layer12_out, w12, b12);
+    nnet::conv_1d_cl<layer11_t, 2, layer12_t, 2, config12>(layer11_out, layer12_out, w12, b12);
 
-    nnet::relu<layer12_t, layer13_t, relu_config13>(layer12_out, layer13_out);
+    nnet::relu<layer12_t, 2, layer13_t, 2,relu_config13>(layer12_out, layer13_out);
 
-    nnet::conv_1d_cl<layer13_t, layer14_t, config14>(layer13_out, layer14_out, w14, b14);
+    nnet::conv_1d_cl<layer13_t, 2, layer14_t, 2, config14>(layer13_out, layer14_out, w14, b14);
 
-    nnet::relu<layer14_t, layer15_t, relu_config15>(layer14_out, layer15_out);
+    nnet::relu<layer14_t, 2, layer15_t, 2, relu_config15>(layer14_out, layer15_out);
 
-    nnet::resize_nearest<layer15_t, config16>(layer15_out, layer16_out);
+    nnet::resize_nearest<layer15_t, 2, 2, config16>(layer15_out, layer16_out);
 
-    nnet::zeropad1d_cl<layer16_t, layer17_t, config17>(layer16_out, layer17_out);
+    nnet::zeropad1d_cl<layer16_t, 2, layer17_t, 50, config17>(layer16_out, layer17_out);
 
-    nnet::concatenate2d<layer35_t, layer17_t, layer18_t, config18>(layer35_cpy2, layer17_out, layer18_out);
+    nnet::concatenate2d<layer35_t, 50, layer17_t, 50, layer18_t, 50, config18>(layer35_cpy2, layer17_out, layer18_out);
 
-    nnet::conv_1d_cl<layer18_t, layer19_t, config19>(layer18_out, layer19_out, w19, b19);
+    nnet::conv_1d_cl<layer18_t, 50, layer19_t, 2, config19>(layer18_out, layer19_out, w19, b19);
 
-    nnet::relu<layer19_t, layer20_t, relu_config20>(layer19_out, layer20_out);
+    nnet::relu<layer19_t, 2, layer20_t, 20, relu_config20>(layer19_out, layer20_out);
 
-    nnet::conv_1d_cl<layer20_t, layer21_t, config21>(layer20_out, layer21_out, w21, b21);
+    nnet::conv_1d_cl<layer20_t, 20, layer21_t, 2, config21>(layer20_out, layer21_out, w21, b21);
 
-    nnet::relu<layer21_t, layer22_t, relu_config22>(layer21_out, layer22_out);
+    nnet::relu<layer21_t, 2, layer22_t, 2, relu_config22>(layer21_out, layer22_out);
 
-    nnet::resize_nearest<layer22_t, config23>(layer22_out, layer23_out);
+    nnet::resize_nearest<layer22_t, 2, 2, config23>(layer22_out, layer23_out);
 
-    nnet::zeropad1d_cl<layer23_t, layer24_t, config24>(layer23_out, layer24_out);
+    nnet::zeropad1d_cl<layer23_t, 2, layer24_t, 50, config24>(layer23_out, layer24_out);
 
-    nnet::concatenate2d<layer34_t, layer24_t, layer25_t, config25>(layer34_cpy2, layer24_out, layer25_out);
+    nnet::concatenate2d<layer34_t, 200, layer24_t, 50, layer25_t, 100, config25>(layer34_cpy2, layer24_out, layer25_out);
 
-    nnet::conv_1d_cl<layer25_t, layer26_t, config26>(layer25_out, layer26_out, w26, b26);
+    nnet::conv_1d_cl<layer25_t, 100, layer26_t, 2, config26>(layer25_out, layer26_out, w26, b26);
 
-    nnet::relu<layer26_t, layer27_t, relu_config27>(layer26_out, layer27_out);
+    nnet::relu<layer26_t, 2, layer27_t, 2, relu_config27>(layer26_out, layer27_out);
 
-    nnet::conv_1d_cl<layer27_t, layer28_t, config28>(layer27_out, layer28_out, w28, b28);
+    nnet::conv_1d_cl<layer27_t, 2, layer28_t, 2, config28>(layer27_out, layer28_out, w28, b28);
 
-    nnet::relu<layer28_t, layer29_t, relu_config29>(layer28_out, layer29_out);
+    nnet::relu<layer28_t, 2, layer29_t, 20, relu_config29>(layer28_out, layer29_out);
 
-    nnet::dense_resource<layer29_t, layer31_t, config31>(layer30_out, layer31_out, w31, b31);
+    nnet::dense_resource<layer29_t, 20, layer31_t, 2, config31>(layer30_out, layer31_out, w31, b31);
 
-    nnet::sigmoid<layer31_t, layer33_t, sigmoid_config33>(layer31_out, layer33_out);
+    nnet::sigmoid<layer31_t, 2, layer33_t, 2, sigmoid_config33>(layer31_out, layer33_out);
 
 
 // hls-fpga-machine-learning return

@@ -54,8 +54,8 @@
 */
 // hls-fpga-machine-learning instantiate GCC top-level
 void myproject(
-    stream_in<input_t> &inputLayer_stream,
-    stream_out<result_t> &layer33_out_stream
+    stream_in<input_t, 600> &inputLayer_stream,
+    stream_out<result_t, 2> &layer33_out_stream
 );
 #else
 // Maximum initiation interval, concurrency and frequency for HLS syntheis are defined here
@@ -68,8 +68,8 @@ hls_scheduler_target_fmax_mhz(200)
  */
 // hls-fpga-machine-learning instantiate HLS top-level
 component void myproject(
-    stream_in<input_t> &inputLayer_stream,
-    stream_out<result_t> &layer33_out_stream
+    stream_in<input_t, 600> &inputLayer_stream,
+    stream_out<result_t, 2> &layer33_out_stream
 );
 #endif
 

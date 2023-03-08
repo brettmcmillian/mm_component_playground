@@ -12,6 +12,9 @@
 
 // hls-fpga-machine-learning insert bram
 
+constexpr unsigned int INBUFF = 600;
+constexpr unsigned int OUTBUFF = 2;
+
 #define CHECKPOINT 5000
 
 // This function is written to avoid stringstream, which is
@@ -56,8 +59,8 @@ int main(int argc, char **argv) {
             }
 
             // hls-fpga-machine learning instantiate inputs and outputs
-            stream_in<input_t> inputLayer_input;
-            stream_out<result_t> layer33_out_output;
+            stream_in<input_t, INBUFF> inputLayer_input;
+            stream_out<result_t, OUTBUFF> layer33_out_output;
 
             std::vector<float> in;
             std::vector<float> pr;
@@ -78,7 +81,7 @@ int main(int argc, char **argv) {
             for (int j = 0 ; j < N_INPUT_1_1*N_INPUT_2_1 ; j++) {
                         vals_0[j] = in[j]; 
             }
-            nnet::convert_data<float, input_t, N_INPUT_1_1*N_INPUT_2_1>(vals_0, inputLayer_input);
+            nnet::convert_data<float, input_t, INBUFF, N_INPUT_1_1*N_INPUT_2_1>(vals_0, inputLayer_input);
 
             predictions.push_back(std::move(pr));
 
@@ -90,7 +93,7 @@ int main(int argc, char **argv) {
 
             // hls-fpga-machine-learning convert output
             float res[N_LAYER_31];
-            nnet::convert_data_back<result_t, float, N_LAYER_31>(layer33_out_output, res);
+            nnet::convert_data_back<result_t, OUTBUFF, float, N_LAYER_31>(layer33_out_output, res);
 
 
             for(int i = 0; i < N_LAYER_31; i++) {
@@ -127,15 +130,15 @@ int main(int argc, char **argv) {
 
         for (int iteration = 0; iteration < num_iterations; iteration++) {
             // hls-fpga-machine learning instantiate inputs and outputs
-            stream_in<input_t> inputLayer_input;
-            stream_out<result_t> layer33_out_output;
+            stream_in<input_t, INBUFF> inputLayer_input;
+            stream_out<result_t, OUTBUFF> layer33_out_output;
 
             // hls-fpga-machine-learning insert zero
             float vals_0[N_INPUT_1_1*N_INPUT_2_1]; 
             for (int j = 0 ; j < N_INPUT_1_1*N_INPUT_2_1 ; j++) {
                         vals_0[j] = 0.0; 
             }
-            nnet::convert_data<float, input_t, N_INPUT_1_1*N_INPUT_2_1>(vals_0, inputLayer_input);
+            nnet::convert_data<float, input_t, INBUFF, N_INPUT_1_1*N_INPUT_2_1>(vals_0, inputLayer_input);
 
             // hls-fpga-machine-learning insert top-level-function
             ihc_hls_enqueue_noret(&myproject, inputLayer_input, layer33_out_output);
@@ -145,7 +148,7 @@ int main(int argc, char **argv) {
 
             // hls-fpga-machine-learning convert output
             float res[N_LAYER_31];
-            nnet::convert_data_back<result_t, float, N_LAYER_31>(layer33_out_output, res);
+            nnet::convert_data_back<result_t, OUTBUFF, float, N_LAYER_31>(layer33_out_output, res);
 
 
             for(int i = 0; i < N_LAYER_31; i++) {

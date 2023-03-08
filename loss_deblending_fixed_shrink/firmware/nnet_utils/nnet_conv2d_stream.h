@@ -110,10 +110,10 @@ void shift_line_buffer_2d(
 *   (3) Matrix mulitplication - performs dense matrix multiplication between the current input window and kernel weights
 *   (4) Counter housekeeping - keeps track of current pixel and stride
 */
-template<class data_T, class res_T, typename CONFIG_T>
+template<class data_T, class res_T, unsigned int res_N, typename CONFIG_T>
 void compute_output_buffer_2d(
     const data_T &in_elem,
-    stream<res_T> &res_stream,
+    stream<res_T, res_N> &res_stream,
     nnet::shift_reg<typename data_T::value_type, CONFIG_T::pad_left + CONFIG_T::in_width + CONFIG_T::pad_right> line_buffer[MAX(CONFIG_T::filt_height - 1, 1)][CONFIG_T::n_chan],
     typename data_T::value_type kernel_window[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan],
     const typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan * CONFIG_T::n_filt],
@@ -173,10 +173,10 @@ void compute_output_buffer_2d(
     }
 }
 
-template <class data_T, class res_T, typename CONFIG_T>
+template <class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
 void conv_2d_cl(
-    stream<data_T> &data,
-    stream<res_T>  &res,
+    stream<data_T, data_N> &data,
+    stream<res_T, res_N>  &res,
     const typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
     const typename CONFIG_T::bias_t   biases[CONFIG_T::n_filt] 
 ) {
@@ -194,7 +194,7 @@ void conv_2d_cl(
     for (int row = 0; row < CONFIG_T::pad_top; row++) {
         PaddingTopWidth: 
         for (int col = 0; col < CONFIG_T::pad_left + CONFIG_T::in_width + CONFIG_T::pad_right; col++) {
-            compute_output_buffer_2d<data_T, res_T, CONFIG_T>(padds, res, line_buffer, kernel_window, weights, biases);
+            compute_output_buffer_2d<data_T, res_T, res_N, CONFIG_T>(padds, res, line_buffer, kernel_window, weights, biases);
         }
     }
 
@@ -204,19 +204,19 @@ void conv_2d_cl(
         // Input image left-side padding
         PaddingLeftWidth: 
         for (int col = 0; col < CONFIG_T::pad_left; col++) {
-            compute_output_buffer_2d<data_T, res_T, CONFIG_T>(padds, res, line_buffer, kernel_window, weights, biases);
+            compute_output_buffer_2d<data_T, res_T, res_N, CONFIG_T>(padds, res, line_buffer, kernel_window, weights, biases);
         }
         
         // Read input image
         ReadInputWidth: 
         for (int col = 0; col < CONFIG_T::in_width; col++) {
-            compute_output_buffer_2d<data_T, res_T, CONFIG_T>(data.read(), res, line_buffer, kernel_window, weights, biases);
+            compute_output_buffer_2d<data_T, res_T, res_N, CONFIG_T>(data.read(), res, line_buffer, kernel_window, weights, biases);
         }
 
         // Input image right-side padding
         PaddingRightWidth: 
         for (int col = 0; col < CONFIG_T::pad_right; col++) {
-            compute_output_buffer_2d<data_T, res_T, CONFIG_T>(padds, res, line_buffer, kernel_window, weights, biases);
+            compute_output_buffer_2d<data_T, res_T, res_N, CONFIG_T>(padds, res, line_buffer, kernel_window, weights, biases);
         }
     }
 
@@ -226,7 +226,7 @@ void conv_2d_cl(
     for (int row = 0; row < CONFIG_T::pad_bottom; row++) {
         PaddingBottomWidth: 
         for (int col = 0; col < CONFIG_T::pad_left + CONFIG_T::in_width + CONFIG_T::pad_right; col++) {
-            compute_output_buffer_2d<data_T, res_T, CONFIG_T>(padds, res, line_buffer, kernel_window, weights, biases);
+            compute_output_buffer_2d<data_T, res_T, res_N, CONFIG_T>(padds, res, line_buffer, kernel_window, weights, biases);
         }
     }
 }

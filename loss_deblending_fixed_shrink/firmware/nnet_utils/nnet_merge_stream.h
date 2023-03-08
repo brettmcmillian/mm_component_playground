@@ -3,8 +3,8 @@
 
 namespace nnet {
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void add(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void add(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     assert(input1_T::size == input2_T::size && input1_T::size == res_T::size);
 
     AddLoop: 
@@ -25,8 +25,8 @@ void add(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void subtract(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void subtract(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     assert(input1_T::size == input2_T::size && input1_T::size == res_T::size);
 
     SubtractLoop: 
@@ -47,8 +47,8 @@ void subtract(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &r
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void multiply(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void multiply(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     assert(input1_T::size == input2_T::size && input1_T::size == res_T::size);
 
     MultLoop: 
@@ -69,8 +69,8 @@ void multiply(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &r
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void average(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void average(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     assert(input1_T::size == input2_T::size && input1_T::size == res_T::size);
 
     AvgLoop: 
@@ -91,8 +91,8 @@ void average(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &re
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void maximum(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void maximum(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     assert(input1_T::size == input2_T::size && input1_T::size == res_T::size);
 
     MaxLoop: 
@@ -113,8 +113,8 @@ void maximum(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &re
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void minimum(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void minimum(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     assert(input1_T::size == input2_T::size && input1_T::size == res_T::size);
 
     MinLoop: 
@@ -135,8 +135,8 @@ void minimum(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &re
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void concatenate1d(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void concatenate1d(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     hls_register res_T out_data;
     
     ConcatLoop1: 
@@ -164,8 +164,8 @@ void concatenate1d(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_
     res.write(out_data);
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void concatenate2d_0(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void concatenate2d_0(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     ConcatLoopHeight1: 
     #pragma ii 1
     for (int i = 0; i < CONFIG_T::n_elem1_0; i++) {
@@ -198,8 +198,8 @@ void concatenate2d_0(stream<input1_T> &data1, stream<input2_T> &data2, stream<re
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void concatenate2d_1(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void concatenate2d_1(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     ConcatLoopHeight: 
     #pragma ii 1
     for (int i = 0; i < CONFIG_T::n_elem1_0; i++) {
@@ -223,17 +223,17 @@ void concatenate2d_1(stream<input1_T> &data1, stream<input2_T> &data2, stream<re
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void concatenate2d(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void concatenate2d(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     if (CONFIG_T::axis == 2 || CONFIG_T::axis == -1) {
-        concatenate2d_1<input1_T, input2_T, res_T, CONFIG_T>(data1, data2, res);
+        concatenate2d_1<input1_T, input1_N, input2_T, input2_N, res_T, res_N, CONFIG_T>(data1, data2, res);
     } else {
-        concatenate2d_0<input1_T, input2_T, res_T, CONFIG_T>(data1, data2, res);
+        concatenate2d_0<input1_T, input1_N, input2_T, input2_N, res_T, res_N, CONFIG_T>(data1, data2, res);
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void concatenate3d_0(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void concatenate3d_0(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     ConcatLoopHeight1: 
     for (int i = 0; i < CONFIG_T::n_elem1_0; i++) {
         ConcatLoopWidth1: 
@@ -272,8 +272,8 @@ void concatenate3d_0(stream<input1_T> &data1, stream<input2_T> &data2, stream<re
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void concatenate3d_1(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void concatenate3d_1(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     ConcatLoopHeight: 
     for (int i = 0; i < CONFIG_T::n_elem1_0; i++) {
         ConcatLoopWidth1: 
@@ -309,8 +309,8 @@ void concatenate3d_1(stream<input1_T> &data1, stream<input2_T> &data2, stream<re
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void concatenate3d_2(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void concatenate3d_2(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     ConcatLoopHeight: for (int i = 0; i < CONFIG_T::n_elem1_0; i++) {
         ConcatLoopWidth: 
         #pragma ii 1
@@ -337,14 +337,14 @@ void concatenate3d_2(stream<input1_T> &data1, stream<input2_T> &data2, stream<re
     }
 }
 
-template<class input1_T, class input2_T, class res_T, typename CONFIG_T>
-void concatenate3d(stream<input1_T> &data1, stream<input2_T> &data2, stream<res_T> &res) {
+template<class input1_T, unsigned int input1_N, class input2_T, unsigned int input2_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void concatenate3d(stream<input1_T, input1_N> &data1, stream<input2_T, input2_N> &data2, stream<res_T, res_N> &res) {
     if (CONFIG_T::axis == 3 || CONFIG_T::axis == -1) {
-        concatenate3d_2<input1_T, input2_T, res_T, CONFIG_T>(data1, data2, res);
+        concatenate3d_2<input1_T, input1_N, input2_T, input2_N, res_T, res_N, CONFIG_T>(data1, data2, res);
     } else if (CONFIG_T::axis == 2 || CONFIG_T::axis == -2) {
-        concatenate3d_1<input1_T, input2_T, res_T, CONFIG_T>(data1, data2, res);
+        concatenate3d_1<input1_T, input1_N, input2_T, input2_N, res_T, res_N, CONFIG_T>(data1, data2, res);
     } else {
-        concatenate3d_0<input1_T, input2_T, res_T, CONFIG_T>(data1, data2, res);
+        concatenate3d_0<input1_T, input1_N, input2_T, input2_N, res_T, res_N, CONFIG_T>(data1, data2, res);
     }
 }
 

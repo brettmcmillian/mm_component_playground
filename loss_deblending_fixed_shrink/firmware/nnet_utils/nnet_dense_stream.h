@@ -7,10 +7,10 @@
 
 namespace nnet {
 
-template<class data_T, class res_T, typename CONFIG_T>
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
 void dense_resource(
-    stream<data_T> &data_stream, 
-    stream<res_T> &res_stream,
+    stream<data_T, data_N> &data_stream, 
+    stream<res_T, res_N> &res_stream,
     const typename CONFIG_T::weight_t weights[CONFIG_T::n_in*CONFIG_T::n_out],
     const typename CONFIG_T::bias_t   biases[CONFIG_T::n_out])
 {

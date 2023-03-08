@@ -12,8 +12,8 @@ struct broadcast_config {
   static const unsigned n_dupl = 2;
 };
 
-template<class data_T, class res_T, int N>
-void clone_stream(stream<data_T> &data, stream<res_T> &res1, stream<res_T> &res2) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N1, unsigned int res_N2, int N>
+void clone_stream(stream<data_T, data_N> &data, stream<res_T, res_N1> &res1, stream<res_T, res_N2> &res2) {
     CloneLoop: 
     #pragma ii 1
     for (int i = 0; i < N / data_T::size; i++) {
@@ -33,8 +33,8 @@ void clone_stream(stream<data_T> &data, stream<res_T> &res1, stream<res_T> &res2
     }
 }
 
-template<class data_T, class res_T, int N>
-void clone_stream(stream<data_T> &data, stream<res_T> &res1, stream<res_T> &res2, stream<res_T> &res3) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N1, unsigned int res_N2, unsigned int res_N3, int N>
+void clone_stream(stream<data_T, data_N> &data, stream<res_T, res_N1> &res1, stream<res_T, res_N2> &res2, stream<res_T, res_N3> &res3) {
     CloneLoop: 
     #pragma ii 1
     for (int i = 0; i < N / data_T::size; i++) {

@@ -45,8 +45,8 @@ void convert_data_back(srcType *src, dstType *dst) {
   }
 }
 
-template<class srcType, class dstType, size_t SIZE>
-void convert_data(srcType *src, stream_in<dstType> &dst) {
+template<class srcType, class dstType, unsigned int N,  size_t SIZE>
+void convert_data(srcType *src, stream_in<dstType, N> &dst) {
     for (size_t i = 0; i < SIZE / dstType::size; i++) {
         dstType ctype;
         for (size_t j = 0; j < dstType::size; j++) {
@@ -56,8 +56,8 @@ void convert_data(srcType *src, stream_in<dstType> &dst) {
     }
 }
 
-template<class srcType, class dstType, size_t SIZE>
-void convert_data_back(stream_out<srcType> &src, dstType *dst) {
+template<class srcType, unsigned int N, class dstType, size_t SIZE>
+void convert_data_back(stream_out<srcType, N> &src, dstType *dst) {
     for (size_t i = 0; i < SIZE / srcType::size; i++) {
         srcType ctype = src.read();
         for (size_t j = 0; j < srcType::size; j++) {
@@ -89,8 +89,8 @@ void save_output_array(data_T *data, save_T *ptr, size_t layer_size) {
     }
 }
 
-template<class data_T, class save_T>
-void save_output_array(stream<data_T> &data, save_T *ptr, size_t layer_size) {
+template<class data_T, unsigned int N, class save_T>
+void save_output_array(stream<data_T, N> &data, save_T *ptr, size_t layer_size) {
     for (size_t i = 0; i < layer_size / data_T::size; i++) {
         data_T ctype = data.read();
         for (size_t j = 0; j < data_T::size; j++) {
@@ -132,8 +132,8 @@ void save_layer_output(data_T *data, const char *layer_name, size_t layer_size) 
     }
 }
 
-template<class data_T>
-void save_layer_output(stream<data_T> &data, const char *layer_name, size_t layer_size) {
+template<class data_T, unsigned int N>
+void save_layer_output(stream<data_T, N> &data, const char *layer_name, size_t layer_size) {
     if (!trace_enabled) return;
     
     if (trace_outputs) {

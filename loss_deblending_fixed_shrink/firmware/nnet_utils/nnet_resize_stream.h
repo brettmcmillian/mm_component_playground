@@ -5,8 +5,8 @@
 
 namespace nnet {
 
-template<class data_T, typename CONFIG_T>
-void resize_nearest(stream<data_T> &image, stream<data_T> &resized) {
+template<class data_T, unsigned int N1, unsigned int N2, typename CONFIG_T>
+void resize_nearest(stream<data_T, N1> &image, stream<data_T, N2> &resized) {
     assert(CONFIG_T::new_height % CONFIG_T::height == 0);
     assert(CONFIG_T::new_width % CONFIG_T::width == 0);
 

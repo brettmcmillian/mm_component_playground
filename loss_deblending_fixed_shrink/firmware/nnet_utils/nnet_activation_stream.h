@@ -9,8 +9,8 @@ namespace nnet{
 // *************************************************
 //       Linear Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void linear(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void linear(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     LinearActLoop:
     #pragma ii 1
     for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
@@ -30,8 +30,8 @@ void linear(stream<data_T> &data, stream<res_T> &res) {
 // *************************************************
 //       ReLU Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void relu(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void relu(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     ReLUActLoop:
     #pragma ii 1
     for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
@@ -52,8 +52,8 @@ void relu(stream<data_T> &data, stream<res_T> &res) {
 // *************************************************
 //       Leaky RELU Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void leaky_relu(stream<data_T> &data, const typename data_T::value_type alpha, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void leaky_relu(stream<data_T, data_N> &data, const typename data_T::value_type alpha, stream<res_T, res_N> &res) {
     constexpr unsigned multiplier_limit = DIV_ROUNDUP(data_T::size, CONFIG_T::reuse_factor);
     constexpr unsigned pipeline = data_T::size / multiplier_limit;
     
@@ -77,8 +77,8 @@ void leaky_relu(stream<data_T> &data, const typename data_T::value_type alpha, s
 // *************************************************
 //       Thresholded RELU Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void thresholded_relu(stream<data_T> &data, const typename data_T::value_type theta, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void thresholded_relu(stream<data_T, data_N> &data, const typename data_T::value_type theta, stream<res_T, res_N> &res) {
     ThresholdedReLUActLoop:
     #pragma ii 1
     for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
@@ -99,8 +99,8 @@ void thresholded_relu(stream<data_T> &data, const typename data_T::value_type th
 // *************************************************
 //       ELU Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void elu(stream<data_T> &data, const typename data_T::value_type alpha, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void elu(stream<data_T, data_N> &data, const typename data_T::value_type alpha, stream<res_T, res_N> &res) {
     #include "activation_tables/elu_table.tb"
 
     constexpr unsigned multiplier_limit = DIV_ROUNDUP(data_T::size, CONFIG_T::reuse_factor);
@@ -129,16 +129,16 @@ void elu(stream<data_T> &data, const typename data_T::value_type alpha, stream<r
     }
 }
 
-template<class data_T, class res_T, typename CONFIG_T>
-void elu(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void elu(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     elu<data_T, res_T, CONFIG_T>(data, 1.0, res);
 }
 
 // *************************************************
 //       SeLU Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void selu(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void selu(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     #include "activation_tables/selu_table.tb"
 
     SeluActLoop:
@@ -167,8 +167,8 @@ void selu(stream<data_T> &data, stream<res_T> &res) {
 // *************************************************
 //       PReLU Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void prelu(stream<data_T> &data, const typename data_T::value_type alpha[CONFIG_T::n_in], stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void prelu(stream<data_T, data_N> &data, const typename data_T::value_type alpha[CONFIG_T::n_in], stream<res_T, res_N> &res) {
     constexpr unsigned multiplier_limit = DIV_ROUNDUP(data_T::size, CONFIG_T::reuse_factor);
     constexpr unsigned pipeline = data_T::size / multiplier_limit;
     
@@ -192,8 +192,8 @@ void prelu(stream<data_T> &data, const typename data_T::value_type alpha[CONFIG_
 // *************************************************
 //       Softplus Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void softplus(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void softplus(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     #include "activation_tables/softplus_table.tb"
 
     SoftplusActLoop:
@@ -219,8 +219,8 @@ void softplus(stream<data_T> &data, stream<res_T> &res) {
 // *************************************************
 //       Softsign Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void softsign(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void softsign(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     #include "activation_tables/softsign_table.tb"
 
     static const int MAX_VALUE = 8;
@@ -259,8 +259,8 @@ void softsign(stream<data_T> &data, stream<res_T> &res) {
 //       Softmax Activation
 // *************************************************
 
-template <class data_T, class res_T, typename CONFIG_T>
-void softmax_stable(stream<data_T> &data, stream<res_T> &res) {
+template <class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void softmax_stable(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     #include "activation_tables/exp_table.tb"
     #include "activation_tables/invert_table.tb"
 
@@ -320,8 +320,8 @@ void softmax_stable(stream<data_T> &data, stream<res_T> &res) {
     }
 }
 
-template <class data_T, class res_T, typename CONFIG_T>
-void softmax_latency(stream<data_T> &data, stream<res_T> &res){
+template <class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void softmax_latency(stream<data_T, data_N> &data, stream<res_T, res_N> &res){
     #include "activation_tables/exp_table_latency.tb"
     #include "activation_tables/invert_table_latency.tb"
     
@@ -362,8 +362,8 @@ void softmax_latency(stream<data_T> &data, stream<res_T> &res){
     }
 }
 
-template<class data_T, class res_T, typename CONFIG_T>
-void softmax_legacy(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void softmax_legacy(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     #include "activation_tables/exp_table_legacy.tb"
     #include "activation_tables/invert_table_legacy.tb"
     
@@ -417,8 +417,8 @@ void softmax_legacy(stream<data_T> &data, stream<res_T> &res) {
     }
 }
 
-template<class data_T, class res_T, typename CONFIG_T>
-void softmax_argmax(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void softmax_argmax(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     #pragma ii 1
     for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
         data_T in_data = data.read();
@@ -445,8 +445,8 @@ void softmax_argmax(stream<data_T> &data, stream<res_T> &res) {
     }
 }
 
-template<class data_T, class res_T, typename CONFIG_T>
-void softmax(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void softmax(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     switch(CONFIG_T::implementation) {
         case softmax_implementation::latency:
             softmax_latency<data_T, res_T, CONFIG_T>(data, res);
@@ -469,8 +469,8 @@ void softmax(stream<data_T> &data, stream<res_T> &res) {
 // *************************************************
 //       TanH Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void dense_tanh(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void dense_tanh(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     #include "activation_tables/tanh_table.tb"
     static const int MAX_VALUE=4;
 
@@ -507,8 +507,8 @@ void dense_tanh(stream<data_T> &data, stream<res_T> &res) {
 // *************************************************
 //       Sigmoid Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void sigmoid(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void sigmoid(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     #include "activation_tables/sigmoid_table.tb"
     static const int MAX_VALUE=8;
 
@@ -545,8 +545,8 @@ void sigmoid(stream<data_T> &data, stream<res_T> &res) {
 //       Hard sigmoid Activation
 // *************************************************
 // Note - Theano and Tensorflow might have different definitions for hard sigmoid; could provide two implementations
-template<class data_T, class res_T, typename CONFIG_T>
-void hard_sigmoid(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void hard_sigmoid(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     static const typename data_T::value_type slope = (typename data_T::value_type) 0.2;
     static const typename data_T::value_type shift = (typename data_T::value_type) 0.5;
 
@@ -576,8 +576,8 @@ void hard_sigmoid(stream<data_T> &data, stream<res_T> &res) {
 // *************************************************
 //       Binary TanH Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void binary_tanh(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void binary_tanh(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
     BinaryTanHActLoop: 
     #pragma ii 1
     for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
@@ -599,8 +599,8 @@ void binary_tanh(stream<data_T> &data, stream<res_T> &res) {
 // *************************************************
 //       Ternary TanH Activation
 // *************************************************
-template<class data_T, class res_T, typename CONFIG_T>
-void ternary_tanh(stream<data_T> &data, stream<res_T> &res) {
+template<class data_T, unsigned int data_N, class res_T, unsigned int res_N, typename CONFIG_T>
+void ternary_tanh(stream<data_T, data_N> &data, stream<res_T, res_N> &res) {
   TernaryTanHActLoop: 
     #pragma ii 1
     for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
